@@ -1,0 +1,264 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>3. Akaze features extraction - Rust-CV Tutorials</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="ch1-introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="ch2-first-program.html"><strong aria-hidden="true">2.</strong> Your first CV Program</a></li><li class="chapter-item expanded "><a href="ch3-akaze-features-extraction.html" class="active"><strong aria-hidden="true">3.</strong> Akaze features extraction</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">Rust-CV Tutorials</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2><a class="header" href="#doing-descriptors-extractions" id="doing-descriptors-extractions">Doing descriptors extractions</a></h2>
+<p>In this tutorial we will be doing our second Rust-CV program. Our goal will be to run the Akaze extractor and display the result.</p>
+<p>By oversimplifying quite a lot, features descriptors are points in an image along data that characterize them, that are in interest to us. Usually, we try to found points that have specific patterns. The idea is that each descriptor is quite unique so when comparing pictures if we found the same descriptors on 2 different pictures we can be pretty confident that we are seeing the same object.</p>
+<p>If you want a more precise and accurate description of features, reading the <a href="https://docs.opencv.org/master/df/d54/tutorial_py_features_meaning.html">OpenCV documentation about features</a> or Wikipedia <a href="https://en.wikipedia.org/wiki/Feature_(computer_vision)">feature</a> or <a href="https://en.wikipedia.org/wiki/Visual_descriptor">descriptor</a> pages is recommended.</p>
+<h3><a class="header" href="#project-setup" id="project-setup">Project setup</a></h3>
+<p>As for the previous step, we will create a new binary project: <code>cargo new --bin chapter2-first-program</code></p>
+<p>This time we will use the following as dependencies</p>
+<pre><code class="language-toml">[dependencies]
+cv = { git = &quot;https://github.com/rust-cv/cv.git&quot; }
+imgshow = { git = &quot;https://github.com/rust-cv/cv.git&quot; }
+image = &quot;0.23.7&quot;
+imageproc = &quot;0.21.0&quot;
+</code></pre>
+<h3><a class="header" href="#opening-the-image" id="opening-the-image">Opening the image</a></h3>
+<p>We open the image the same way we have done in chapter 2.</p>
+<pre><code class="language-rs">let src_image = 
+    image::open(&quot;../res/0000000000.png&quot;).expect(&quot;failed to open image file&quot;);
+</code></pre>
+<h3><a class="header" href="#running-the-akaze-feature-extractor" id="running-the-akaze-feature-extractor">Running the Akaze feature extractor</a></h3>
+<p>To run the Akaze feature extractor we start by declaring a threshold. </p>
+<pre><code class="language-rs">let threshold = 0.001f64;
+</code></pre>
+<p>This value act as a sensitivity adjustment for the feature detection. The higher the value the &quot;stronger&quot; the features are. This will also mean we will find less features. On the other hand if we set a very low threshold we will have a lot of values but features of poor quality. Features on smooth surfaces would start to be detected and this will not be helpful later on if we try do matching because of too many false positive.</p>
+<p>Then, we create a <code>Akaze</code> struct which we initialize with the threshold previously declared. </p>
+<pre><code class="language-rs">let akaze = Akaze::new(threshold);
+</code></pre>
+<p>Finally we call the <code>extract</code> method which gives us back features and their associated descriptors.</p>
+<pre><code class="language-rs">let (key_points, _descriptor) = akaze.extract(&amp;src_image);
+</code></pre>
+<p>Then we add the features on the image and display it. The code is quite similar as what we have done in chapter 2.</p>
+<pre><code class="language-rs">let mut image = drawing::Blend(src_image.to_rgba());
+for KeyPoint { point: (x, y), .. } in key_points {
+    drawing::draw_cross_mut(&amp;mut image, Rgba([0, 255, 255, 128]), x as i32, y as i32);
+}
+let out_imgage = DynamicImage::ImageRgba8(image.0);
+imgshow::imgshow(&amp;out_imgage);
+</code></pre>
+<h3><a class="header" href="#result" id="result">Result</a></h3>
+<p>If all went well you should have a window opened containing this pictures</p>
+<p><img src="https://rust-cv.github.io/res/tutorial-images/akaze-result.png" alt="Akaze result" /></p>
+<h3><a class="header" href="#code" id="code">Code</a></h3>
+<p>You can also find the whole project <a href="https://github.com/rust-cv/cv/tree/master/tutorial-chapters/chapter3-akaze-feature-extraction">here</a>. The dependencies of the code are sightly different in the repository, as it utilizes the dependencies within the mono-repo to ensure compatibility with master.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="ch2-first-program.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="ch2-first-program.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
