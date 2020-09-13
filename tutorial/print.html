@@ -165,7 +165,7 @@
 <p>Rust CV is a project that aims to bring Computer Vision (CV) algorithms to the Rust programming language. To follow this tutorial a basic understanding of Rust, and its ecosystem, is required. Also, computer vision knowledge would help.</p>
 <h3><a class="header" href="#about-this-book" id="about-this-book">About this book</a></h3>
 <p>This tutorial aims to help you understand how to use Rust-CV and what it has to offer. In is current state, this tutorial is rather incomplete and a lot of examples are missing. If you spot an error or wish to add a page feel free to do a PR. We are very open so don't hesitate to contribute.</p>
-<p>All of the source and code for this book can be found <a href="https://github.com/rust-cv/cv/tree/master/tutorial/">here</a>.</p>
+<p>The code examples in this book can be found <a href="https://github.com/rust-cv/cv/tree/master/tutorial-code/">here</a>. The source for the book can be found <a href="https://github.com/rust-cv/cv/tree/master/tutorial/">here</a>.</p>
 <h3><a class="header" href="#project-structure" id="project-structure">Project structure</a></h3>
 <p>Before using Rust-CV it is important to understand how the ecosystem is set-up and how to use it.</p>
 <p>If you look at the <a href="https://github.com/rust-cv/cv">repository</a> you can see multiples directories and a <code>Cargo.toml</code> file that contains a <code>[workspace]</code> section. As the name implies, we are using the workspace feature of Cargo. To put it simply, a cargo workspace allows us to creates multiples package in the same repository. 
@@ -227,7 +227,7 @@ imgshow::imgshow(&amp;out_img);
 <p>If the compile you should obtain something similar as the image below:</p>
 <p><img src="https://rust-cv.github.io/res/tutorial-images/random-points.png" alt="Random points" /></p>
 <h3><a class="header" href="#code" id="code">Code</a></h3>
-<p>You can also find the whole project <a href="https://github.com/rust-cv/cv/tree/master/tutorial/code/chapter2-first-program">here</a>. The dependencies of the code are sightly different in the repository, as it utilizes the dependencies within the mono-repo to ensure compatibility with master.</p>
+<p>You can also find the whole project <a href="https://github.com/rust-cv/cv/tree/master/tutorial-code/chapter2-first-program">here</a>. The dependencies of the code are sightly different in the repository, as it utilizes the dependencies within the mono-repo to ensure compatibility with master.</p>
 <h2><a class="header" href="#doing-descriptors-extractions" id="doing-descriptors-extractions">Doing descriptors extractions</a></h2>
 <p>In this tutorial we will be doing our second Rust-CV program. Our goal will be to run the Akaze extractor and display the result.</p>
 <p>By oversimplifying quite a lot, features descriptors are points in an image along data that characterize them, that are in interest to us. Usually, we try to found points that have specific patterns. The idea is that each descriptor is quite unique so when comparing pictures if we found the same descriptors on 2 different pictures we can be pretty confident that we are seeing the same object.</p>
@@ -269,7 +269,7 @@ imgshow::imgshow(&amp;out_imgage);
 <p>If all went well you should have a window opened containing this pictures</p>
 <p><img src="https://rust-cv.github.io/res/tutorial-images/akaze-result.png" alt="Akaze result" /></p>
 <h3><a class="header" href="#code-1" id="code-1">Code</a></h3>
-<p>You can also find the whole project <a href="https://github.com/rust-cv/cv/tree/master/tutorial-chapters/chapter3-akaze-feature-extraction">here</a>. The dependencies of the code are sightly different in the repository, as it utilizes the dependencies within the mono-repo to ensure compatibility with master.</p>
+<p>You can also find the whole project <a href="https://github.com/rust-cv/cv/tree/master/tutorial-code/chapter3-akaze-feature-extraction">here</a>. The dependencies of the code are sightly different in the repository, as it utilizes the dependencies within the mono-repo to ensure compatibility with master.</p>
 
                     </main>
 
