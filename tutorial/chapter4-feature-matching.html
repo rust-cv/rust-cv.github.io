@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Rust-CV Tutorials</title>
-        <meta name="robots" content="noindex" />
+        <title>4. Feature matching - Rust-CV Tutorials</title>
 
 
         <!-- Custom HTML head -->
@@ -82,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="chapter1-introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="chapter2-first-program.html"><strong aria-hidden="true">2.</strong> Setup and First Program</a></li><li class="chapter-item expanded "><a href="chapter3-akaze-feature-extraction.html"><strong aria-hidden="true">3.</strong> Akaze feature extraction</a></li><li class="chapter-item expanded "><a href="chapter4-feature-matching.html"><strong aria-hidden="true">4.</strong> Feature matching</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="chapter1-introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="chapter2-first-program.html"><strong aria-hidden="true">2.</strong> Setup and First Program</a></li><li class="chapter-item expanded "><a href="chapter3-akaze-feature-extraction.html"><strong aria-hidden="true">3.</strong> Akaze feature extraction</a></li><li class="chapter-item expanded "><a href="chapter4-feature-matching.html" class="active"><strong aria-hidden="true">4.</strong> Feature matching</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -143,152 +142,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="introduction-to-rust-cv"><a class="header" href="#introduction-to-rust-cv">Introduction to Rust-CV</a></h1>
-<p>Rust CV is a project that aims to bring Computer Vision (CV) algorithms to the Rust programming language. To follow this tutorial a basic understanding of Rust, and its ecosystem, is required. Also, computer vision knowledge would help.</p>
-<h2 id="about-this-book"><a class="header" href="#about-this-book">About this book</a></h2>
-<p>This tutorial aims to help you understand how to use Rust-CV and what it has to offer. In is current state, this tutorial is rather incomplete and a lot of examples are missing. If you spot an error or wish to add a page feel free to do a PR. We are very open so don't hesitate to contribute.</p>
-<p>The code examples in this book can be found <a href="https://github.com/rust-cv/cv/tree/master/tutorial-code/">here</a>. The source for the book can be found <a href="https://github.com/rust-cv/cv/tree/master/tutorial/">here</a>.</p>
-<h2 id="project-structure"><a class="header" href="#project-structure">Project structure</a></h2>
-<p>Before using Rust-CV it is important to understand how the ecosystem is set-up and how to use it.</p>
-<p>If you look at the <a href="https://github.com/rust-cv/cv">repository</a> you can see multiples directories and a <code>Cargo.toml</code> file that contains a <code>[workspace]</code> section. As the name implies, we are using the workspace feature of Cargo. To put it simply, a cargo workspace allows us to create multiple packages in the same repository. 
-You can check the <a href="https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html">official documentation</a> to get more details.</p>
-<p>This is what happens here. Rust-CV is a mono-repository project which is made of multiple packages. For instance, we have the <code>cv-core</code> directory that contains the very basic things for computer vision. We also have the <code>imgshow</code> directory which allow us to show images. There is many more but we won't go deeper for now. The <code>cv</code> crate needs to be explained though. The <code>cv</code> crate is rather empty (code wise) and just reexports most of the other package so by just depending on it we have most of what the project has to offer.</p>
-<p>There are three things to remember here :</p>
-<ul>
-<li><a href="https://github.com/rust-cv/cv">Rust-CV repository</a> is a mono repository that is split-up into multiple packages.</li>
-<li>The way the project is structured allows you to use tiny crates so you don't have to pay the price for all the CV code if you just use a subpart. </li>
-<li>The project defines a crate named <code>cv</code> that depends on many others just to re-export them. This is useful to get started faster, as by just pulling this crate you have already many computer vision algorithms and data structures ready to use.</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="first-program"><a class="header" href="#first-program">First program</a></h1>
-<p>In this chapter, we will be reviewing our first program. It is not even really related to computer vision, but it will help you get started with some basic tools that will be used again later and get familiar with the tutorial process. We will just be loading an image, drawing random points on it, and displaying it. This is very basic, but at least you can make sure you have everything set up correctly before attacking more ambitious problems.</p>
-<h2 id="running-the-program"><a class="header" href="#running-the-program">Running the program</a></h2>
-<p>In order to start, we will clone the <a href="https://github.com/rust-cv/cv">Rust CV mono-repo</a>. Change into the repository directory. Run the following:</p>
-<pre><code class="language-bash">cargo run --release --bin chapter2-first-program
-</code></pre>
-<p>You should see a grayscale image (from the Kitti dataset) with thousands of small blue translucent crosses drawn on it. If you see this, then everything is working on your computer. Here is what it should look like:</p>
-<p><img src="https://rust-cv.github.io/res/tutorial-images/random-points.png" alt="Random points" /></p>
-<p>We are now going to go through the code in <code>tutorial-code/chapter2-first-program/src/main.rs</code> piece-by-piece. We will do this for each chapter of the book and its relevant example. It is recommended to tweak the code in every chapter to get a better idea of how the code works. All of the code samples can be found in <code>tutorial-code</code>. We will skip talking about the imports unless they are relevant at any point. Comments will also be omitted since we will be discussing the code in this tutorial.</p>
-<h2 id="the-code"><a class="header" href="#the-code">The code</a></h2>
-<h3 id="load-the-image"><a class="header" href="#load-the-image">Load the image</a></h3>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>    let src_image = image::open(&quot;res/0000000000.png&quot;).expect(&quot;failed to open image file&quot;);
-<span class="boring">}
-</span></code></pre></pre>
-<p>This code will load an image called <code>res/0000000000.png</code> relative to the current directory you are running this program from. This will only work when you are in the root of the Rust CV mono-repo, which is where the <code>res</code> directory is located.</p>
-<h3 id="create-a-random-number-generator"><a class="header" href="#create-a-random-number-generator">Create a random number generator</a></h3>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>    let mut rng = rand::thread_rng();
-<span class="boring">}
-</span></code></pre></pre>
-<p>This code creates a random number generator (RNG) using the <code>rand</code> crate. This random number generator will use entropy information from the OS to seed a fairly robust PRNG on a regular basis, and it is used here because it is very simple to create one.</p>
-<h3 id="drawing-the-crosses"><a class="header" href="#drawing-the-crosses">Drawing the crosses</a></h3>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>    let mut image_canvas = drawing::Blend(src_image.to_rgba8());
-    for _ in 0..5000 {
-        let x = rng.gen_range(0..src_image.width()) as i32;
-        let y = rng.gen_range(0..src_image.height()) as i32;
-        drawing::draw_cross_mut(&amp;mut image_canvas, Rgba([0, 255, 255, 128]), x, y);
-    }
-<span class="boring">}
-</span></code></pre></pre>
-<p>This section of code is going to iterate <code>5000</code> times. Each iteration it is going to generate a random x and y position that is on the image. We then use the <code>imageproc::drawing</code> module to draw a cross on the spot in question. Note that the <code>image_canvas</code> is created by making an RGBA version of the original grayscale image and then wrapping it in the <code>imageproc::drawing::Blend</code> adapter. This is done so that when we draw the cross onto the canvas that it will use the alpha value (which we set to <code>128</code>) to make the cross translucent. This is useful so that we can see through the cross a little bit so that it doesn't totally obscure the underlying image.</p>
-<h3 id="changing-the-image-back-into-dynamicimage"><a class="header" href="#changing-the-image-back-into-dynamicimage">Changing the image back into DynamicImage</a></h3>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>    let out_image = DynamicImage::ImageRgba8(image_canvas.0);
-<span class="boring">}
-</span></code></pre></pre>
-<p>We now take the <code>RgbaImage</code> and turn it into a <code>DynamicImage</code>. This is done because <code>DynamicImage</code> is a wrapper around all image types that has convenient save and load methods, and we actually used it when we originally loaded the image.</p>
-<h3 id="write-the-image-to-a-temporary-file"><a class="header" href="#write-the-image-to-a-temporary-file">Write the image to a temporary file</a></h3>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>    let image_file_path = tempfile::Builder::new()
-        .suffix(&quot;.png&quot;)
-        .tempfile()
-        .unwrap()
-        .into_temp_path();
-    out_image.save(&amp;image_file_path).unwrap();
-<span class="boring">}
-</span></code></pre></pre>
-<p>Here we use the <code>tempfile</code> crate to create a temporary file. The benefit of a temporary file is that it can be deleted automatically for us when we are done with it. In this case it may not get deleted automatically because the OS image viewer will later be used and it may prevent the file from being deleted, but it is good practice to create temporary files to store image.</p>
-<p>After we create the temporary file path, we write to the path by saving the output image to it.</p>
-<h3 id="open-the-image"><a class="header" href="#open-the-image">Open the image</a></h3>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>    open::that(&amp;image_file_path).unwrap();
-    std::thread::sleep(std::time::Duration::from_secs(5));
-<span class="boring">}
-</span></code></pre></pre>
-<p>We use the <code>open</code> crate here to open the image file. This will automatically use the program configured on your computer for viewing images to open the image. Since the image program does not open the file right away, we have to sleep for some period of time to ensure we don't delete the temporary file.</p>
-<h2 id="end"><a class="header" href="#end">End</a></h2>
-<p>This is the end of this chapter.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="feature-extraction"><a class="header" href="#feature-extraction">Feature extraction</a></h1>
-<p>In this chapter, we will be writing our second Rust-CV program. Our goal will be to run the AKAZE extractor and display the result.</p>
-<h2 id="what-is-an-image-feature"><a class="header" href="#what-is-an-image-feature">What is an image feature?</a></h2>
-<p>Features are comprised of a location in an image (called a &quot;keypoint&quot;) and some data that helps characterize visual information about the feature (called a &quot;descriptor&quot;). We typically try to find features on images which can be matched to each other most easily. We want each feature to be visually discriminative and distinct so that we can find similar-looking features in other images without getting false-positives.</p>
-<p>For the purposes of Multiple-View Geometry (MVG), which encompasses Structure from Motion (SfM) and visual Simultaneous Localization and Mapping (vSLAM), we typically wish to erase certain information from the descriptor of the feature. Specifically, we want features to match so long as they correspond to the same &quot;landmark&quot;. A landmark is a visually distinct 3d point. Since the position and orientation (known as &quot;pose&quot;) of the camera will be different in different images, the symmetric perspective distortion, in-plane rotation, lighting, and scale of the feature might be different between different frames. For simplicity, all of these terms mean that a feature looks different when you look at it from different perspectives and at different ISO, exposure, or lighting conditions. Due to this, we typically want to erase this variable information as much as possible so that our algorithms see two features of the same landmark as the same despite these differences.</p>
-<p>If you want a more precise and accurate description of features, reading the <a href="https://docs.opencv.org/master/df/d54/tutorial_py_features_meaning.html">OpenCV documentation about features</a> or Wikipedia <a href="https://en.wikipedia.org/wiki/Feature_(computer_vision)">feature</a> or <a href="https://en.wikipedia.org/wiki/Visual_descriptor">descriptor</a> pages is recommended.</p>
-<h2 id="what-is-akaze-and-how-does-it-work"><a class="header" href="#what-is-akaze-and-how-does-it-work">What is AKAZE and how does it work?</a></h2>
-<p>In this tutorial, we use the feature extraction algoirthm <a href="http://www.bmva.org/bmvc/2013/Papers/paper0013/paper0013.pdf">AKAZE</a>. AKAZE attempts to be invariant to rotation, lighting, and scale. It does not attempt to be invariant towards skew, which can happen if we are looking at a surface from a large angle of incidence. AKAZE occupies a &quot;sweet spot&quot; among feature extraction algorithms. For one, AKAZE feature detection can pick up the interior of corners, corners, points, and blobs. AKAZE's feature matching is very nearly as robust as SIFT, the gold standard for robustness in this class of algorithm, and it often exceeds the performance of SIFT. In terms of speed, AKAZE is significantly faster than SIFT to compute, and it can be sped up substantially with the use of GPUs or <a href="http://tulipp.eu/wp-content/uploads/2019/03/2017_TUD_HEART_kalms.pdf">even FPGAs</a>. However, the other gold standard in this class of algorithms is <a href="https://en.wikipedia.org/wiki/Oriented_FAST_and_rotated_BRIEF">ORB</a> (and the closely related <a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.446.5816&amp;rep=rep1&amp;type=pdf">FREAK</a>, which can perform better than ORB). This algorithm targets speed, and it is roughly 5x faster than AKAZE, although this is implementation-dependent. One downside is that ORB is significantly less robust than AKAZE. Due to these considerations, AKAZE can, given the correct algorithms and computing power, meet the needs of real-time operation while also having high quality output.</p>
-<p>AKAZE picks up features by looking at the approximation of the determinant of the hessian over the luminosity to perform a <a href="https://en.wikipedia.org/wiki/Second_partial_derivative_test">second partial derivative test</a>. This determinant is called the response in this context. Any local maxima in the response greater than a threshold is detected as a keypoint, and sub-pixel positioning is performed to extract the precise location of the keypoint. The threshold is typically above 0 and less than or equal to 0.01. This is done at several different scales, and at each of those scales the image is selectively blurred and occasionally shrunk. In the process of extracting the determinant of the hessian, it extracts first and second order gradients of the luminosity across X and Y in the image. By using the scale and rotation of the feature, we determine a scale and orientation at which to sample the descriptor from. The descriptor is extracted by making a series of binary comparisons in the luminosity, the first order gradients of the luminosity, and the second order gradients of the luminosity. Each binary comparison results in a single bit, and that bit is literally stored as a bit on the computer. In total, 486 comparisons are performed, thus AKAZE has a 486-bit &quot;binary feature descriptor&quot;. For convenience, this can be padded with zeros to become 512-bit.</p>
-<h2 id="running-the-program-1"><a class="header" href="#running-the-program-1">Running the program</a></h2>
-<p>Make sure you are in the Rust CV mono-repo and run:</p>
-<pre><code class="language-bash">cargo run --release --bin chapter3-akaze-feature-extraction
-</code></pre>
-<p>If all went well you should have a window and see this:</p>
-<p><img src="https://rust-cv.github.io/res/tutorial-images/akaze-result.png" alt="Akaze result" /></p>
-<h2 id="the-code-1"><a class="header" href="#the-code-1">The code</a></h2>
-<h3 id="open-the-image-1"><a class="header" href="#open-the-image-1">Open the image</a></h3>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>    let src_image = image::open(&quot;res/0000000000.png&quot;).expect(&quot;failed to open image file&quot;);
-<span class="boring">}
-</span></code></pre></pre>
-<p>We saw this in <a href="./chapter2-first-program.html">chapter 2</a>. This will open the image. Make sure you run this from the correct location.</p>
-<h3 id="create-an-akaze-feature-extractor"><a class="header" href="#create-an-akaze-feature-extractor">Create an AKAZE feature extractor</a></h3>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>    let akaze = Akaze::default();
-<span class="boring">}
-</span></code></pre></pre>
-<p>For the purposes of this tutorial, we will just use the default AKAZE settings. You can modify the settings at this point by changing <code>Akaze::default()</code> to <code>Akaze::sparse()</code> or <code>Akaze::dense()</code>. It also has other settings you can modify as well.</p>
-<h3 id="extract-the-akaze-features"><a class="header" href="#extract-the-akaze-features">Extract the AKAZE features</a></h3>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>    let (key_points, _descriptors) = akaze.extract(&amp;src_image);
-<span class="boring">}
-</span></code></pre></pre>
-<p>This line extacts the features from the image. In this case, we will not be using the descriptor data, so those are discarded with the <code>_</code>.</p>
-<h3 id="draw-crosses-and-show-image"><a class="header" href="#draw-crosses-and-show-image">Draw crosses and show image</a></h3>
-<pre><pre class="playground"><code class="language-rust">
-<span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>    for KeyPoint { point: (x, y), .. } in key_points {
-        drawing::draw_cross_mut(
-            &amp;mut image_canvas,
-            Rgba([0, 255, 255, 128]),
-            x as i32,
-            y as i32,
-        );
-    }
-<span class="boring">}
-</span></code></pre></pre>
-<p>Almost all of the rest of the code is the same as what we saw in <a href="./chapter2-first-program.html">chapter 2</a>. However, the above snippet is slightly different. Rather than randomly generating points, we are now using the X and Y components of the keypoints AKAZE extracted. The output image actually shows the keypoints of the features AKAZE found.</p>
-<h2 id="end-1"><a class="header" href="#end-1">End</a></h2>
-<p>This is the end of this chapter.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="feature-matching"><a class="header" href="#feature-matching">Feature matching</a></h1>
+                        <h1 id="feature-matching"><a class="header" href="#feature-matching">Feature matching</a></h1>
 <p>In this chapter, we will be matching AKAZE features and displaying the matches.</p>
 <h2 id="how-do-we-perform-feature-matching"><a class="header" href="#how-do-we-perform-feature-matching">How do we perform feature matching?</a></h2>
 <h3 id="binary-features"><a class="header" href="#binary-features">Binary Features</a></h3>
@@ -315,13 +169,13 @@ You can check the <a href="https://doc.rust-lang.org/book/ch14-03-cargo-workspac
 <p>If the match in the new group and the match in the old group are only each other, then they are symmetric.</p>
 <p>Another way to try and understand symmetric matching is with a visual aid. Consider a 1d line. Three features (<code>X</code>, <code>Y</code>, and <code>Z</code>) are in the following line: <code>X-----Y-Z</code>. <code>Y</code> is much closer to <code>Z</code> than to <code>X</code>. The closest match to <code>X</code> is <code>Y</code>, but the closest match to <code>Y</code> is <code>Z</code>. Therefore <code>X</code> and <code>Y</code> do not match symmetrically. However, <code>Y</code> and <code>Z</code> do form a symmetric match, because the closest point to <code>Y</code> is <code>Z</code> and the closest point to <code>Z</code> is <code>Y</code>. This analogy does not perfectly apply to our scenario as there aren't two separate groups, but the general concept still applies and can be used in other scenarios even outside of computer vision.</p>
 <p>Symmetric matching helps filter outliers and only find discriminative matches, just like the Lowe's ratio test (or Lowe's distance test). When used together, they can be very powerful to filter outliers without even yet considering any geometric information.</p>
-<h2 id="running-the-program-2"><a class="header" href="#running-the-program-2">Running the program</a></h2>
+<h2 id="running-the-program"><a class="header" href="#running-the-program">Running the program</a></h2>
 <p>Make sure you are in the Rust CV mono-repo and run:</p>
 <pre><code class="language-bash">cargo run --release --bin chapter4-feature-matching
 </code></pre>
 <p>If all went well you should have a window and see this:</p>
 <p><img src="https://rust-cv.github.io/res/tutorial-images/matches.png" alt="Matches" /></p>
-<h2 id="the-code-2"><a class="header" href="#the-code-2">The code</a></h2>
+<h2 id="the-code"><a class="header" href="#the-code">The code</a></h2>
 <h3 id="open-two-images-of-the-same-area"><a class="header" href="#open-two-images-of-the-same-area">Open two images of the same area</a></h3>
 <pre><pre class="playground"><code class="language-rust">
 <span class="boring">#![allow(unused)]
@@ -410,13 +264,16 @@ You can check the <a href="https://doc.rust-lang.org/book/ch14-03-cargo-workspac
 <p>The next step is that we call the draw function. Note that for the first point we use the key point location from image A in the match and for the second point we use the key point location from image B in the match. Of course, we add an offset to image B since it is off to the right of image A. The <code>rgb</code> value is in floating point format, so we have to convert it to <code>u8</code>. This is done by multiplying by 255 and casting (which rounds down). The alpha value is set to 255 to make it totally solid. Unlike the previous chapters, this function doesn't support blending/canvas operation, so we just set the alpha to 255 to avoid it acting strange.</p>
 <h3 id="display-the-resulting-image"><a class="header" href="#display-the-resulting-image">Display the resulting image</a></h3>
 <p>The rest of the code has been discussed in previous chapters. Go back and see them if you are curious how it works. All it does is save the matches image out and open it with your system's configured image viewer.</p>
-<h2 id="end-2"><a class="header" href="#end-2">End</a></h2>
+<h2 id="end"><a class="header" href="#end">End</a></h2>
 <p>This is the end of this chapter.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="chapter3-akaze-feature-extraction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
 
                         <div style="clear: both"></div>
@@ -425,6 +282,9 @@ You can check the <a href="https://doc.rust-lang.org/book/ch14-03-cargo-workspac
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="chapter3-akaze-feature-extraction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
             </nav>
 
@@ -448,11 +308,6 @@ You can check the <a href="https://doc.rust-lang.org/book/ch14-03-cargo-workspac
 
         <!-- Custom JS scripts -->
 
-        <script type="text/javascript">
-        window.addEventListener('load', function() {
-            window.setTimeout(window.print, 100);
-        });
-        </script>
 
     </body>
 </html>

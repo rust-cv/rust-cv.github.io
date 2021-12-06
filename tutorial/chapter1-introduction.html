@@ -3,26 +3,18 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>2. Your first CV Program - Rust-CV Tutorials</title>
-        
-        
+        <title>1. Introduction - Rust-CV Tutorials</title>
 
 
         <!-- Custom HTML head -->
-        
-
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        
         <link rel="icon" href="favicon.svg">
-        
-        
         <link rel="shortcut icon" href="favicon.png">
-        
         <link rel="stylesheet" href="css/variables.css">
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
@@ -30,9 +22,7 @@
 
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        
         <link rel="stylesheet" href="fonts/fonts.css">
-        
 
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
@@ -40,9 +30,7 @@
         <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
-        
 
-        
     </head>
     <body>
         <!-- Provide site root to javascript -->
@@ -93,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="ch1-introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="ch2-first-program.html" class="active"><strong aria-hidden="true">2.</strong> Your first CV Program</a></li><li class="chapter-item expanded "><a href="ch3-akaze-features-extraction.html"><strong aria-hidden="true">3.</strong> Akaze features extraction</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="chapter1-introduction.html" class="active"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="chapter2-first-program.html"><strong aria-hidden="true">2.</strong> Setup and First Program</a></li><li class="chapter-item expanded "><a href="chapter3-akaze-feature-extraction.html"><strong aria-hidden="true">3.</strong> Akaze feature extraction</a></li><li class="chapter-item expanded "><a href="chapter4-feature-matching.html"><strong aria-hidden="true">4.</strong> Feature matching</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -101,7 +89,6 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                
                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
@@ -118,11 +105,9 @@
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
                         </ul>
-                        
                         <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
                             <i class="fa fa-search"></i>
                         </button>
-                        
                     </div>
 
                     <h1 class="menu-title">Rust-CV Tutorials</h1>
@@ -131,14 +116,13 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
-                        
+
                     </div>
                 </div>
 
-                
                 <div id="search-wrapper" class="hidden">
                     <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
                     </form>
                     <div id="searchresults-outer" class="searchresults-outer hidden">
                         <div id="searchresults-header" class="searchresults-header"></div>
@@ -146,7 +130,6 @@
                         </ul>
                     </div>
                 </div>
-                
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
                 <script type="text/javascript">
@@ -159,73 +142,31 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h2><a class="header" href="#your-first-rust-cv-program" id="your-first-rust-cv-program">Your first Rust-CV program</a></h2>
-<p>In this section, we will be doing our first program. It will be very basic and not even really related to computer vision. We will just be loading an image, drawing random points on it and displaying it. This will be very basic but at least you can make sure you have everything setup correctly before attacking more ambitious problems.</p>
-<h3><a class="header" href="#creating-the-project" id="creating-the-project">Creating the project</a></h3>
-<p>In order to start, we will be creating a new project using <code>cargo</code>. Let's run <code>cargo new --bin chapter2-first-program</code> to get a simple binary project.</p>
-<p>Then we will add the<code>image</code> crate to load image. We will also add the <code>imgshow</code> to display images as well as the <code>imageproc</code> crates to modify images. Finally, we will add the <code>rand</code> crates to generate random pixel coordinates.</p>
-<p>So in the <code>cargo.toml</code> file we add the following to the <code>[dependencies]</code> section:</p>
-<pre><code class="language-toml">[dependencies]
-imgshow = { git = &quot;https://github.com/rust-cv/cv.git&quot; }
-image = &quot;0.23.7&quot;
-imageproc = &quot;0.21.0&quot;
-rand = &quot;0.7.3&quot;
-</code></pre>
-<h3><a class="header" href="#adding-an-image" id="adding-an-image">Adding an image</a></h3>
-<p>To get something to display and to work on we will add an image to our project. Create a <code>res</code> directory in the parent directory of the project. In this repository put a png named <code>0000000000.png</code>. You can use the same as the tutorial is using by downloading the same <a href="https://raw.githubusercontent.com/rust-cv/cv/c7540dccf45af310c7f7dfa12ac31a2b04b26224/akaze/res/0000000000.png">image</a>.</p>
-<h3><a class="header" href="#adding-the-use-statements" id="adding-the-use-statements">Adding the use statements</a></h3>
-<p>As you can expect, we to bring into views the crates we have declared as dependencies. So we start our file with a vew use statements:</p>
-<pre><code class="language-rs">use image::{DynamicImage, Rgba, GenericImageView};
-use imageproc::drawing;
-use rand::Rng;
-</code></pre>
-<h3><a class="header" href="#loading-the-image" id="loading-the-image">Loading the image</a></h3>
-<p>Let's start by loading the image: </p>
-<pre><code class="language-rs">let src_image = 
-    image::open(&quot;../res/0000000000.png&quot;).expect(&quot;failed to open image file&quot;);
-</code></pre>
-<p>Nothing fancy here. we just call <code>image::open</code> with a relative path to get an image. As we don't want to handle errors, we use the <code>expect</code> function to panic on failure while displaying a nice error message.</p>
-<h3><a class="header" href="#drawing-random-points-on-our-image" id="drawing-random-points-on-our-image">Drawing random points on our image</a></h3>
-<p>To draw random points on our image, we start by initializing our random generator:</p>
-<pre><code class="language-rs">let mut rng = rand::thread_rng();
-</code></pre>
-<p>Then, we create a canvas with is initialized with our existing image:</p>
-<pre><code class="language-rs">let mut canvas = drawing::Blend(src_image.to_rgba());
-</code></pre>
-<p>And here we can draw 50 random points :</p>
-<pre><code class="language-rs">for _ in 0..50 {
-    let x : i32 = rng.gen_range(0, src_image.width() - 1) as i32;
-    let y : i32 = rng.gen_range(0, src_image.height() - 1) as i32;
-    drawing::draw_cross_mut(&amp;mut canvas, Rgba([0, 255, 255, 128]), x as i32, y as i32);
-}
-</code></pre>
-<p>For each iteration of the loop, we generate a random value for x and y which represent our point location. Then we paint a new point in our canvas.</p>
-<h3><a class="header" href="#displaying-the-image" id="displaying-the-image">Displaying the image</a></h3>
-<p>At this point we just need to convert back our canvas to an image and the we can display it:</p>
-<pre><code class="language-rs">let out_img = DynamicImage::ImageRgba8(canvas.0);
-imgshow::imgshow(&amp;out_img);
-</code></pre>
-<h3><a class="header" href="#result" id="result">Result</a></h3>
-<p>If the compile you should obtain something similar as the image below:</p>
-<p><img src="https://rust-cv.github.io/res/tutorial-images/random-points.png" alt="Random points" /></p>
-<h3><a class="header" href="#code" id="code">Code</a></h3>
-<p>You can also find the whole project <a href="https://github.com/rust-cv/cv/tree/master/tutorial-code/chapter2-first-program">here</a>. The dependencies of the code are sightly different in the repository, as it utilizes the dependencies within the mono-repo to ensure compatibility with master.</p>
+                        <h1 id="introduction-to-rust-cv"><a class="header" href="#introduction-to-rust-cv">Introduction to Rust-CV</a></h1>
+<p>Rust CV is a project that aims to bring Computer Vision (CV) algorithms to the Rust programming language. To follow this tutorial a basic understanding of Rust, and its ecosystem, is required. Also, computer vision knowledge would help.</p>
+<h2 id="about-this-book"><a class="header" href="#about-this-book">About this book</a></h2>
+<p>This tutorial aims to help you understand how to use Rust-CV and what it has to offer. In is current state, this tutorial is rather incomplete and a lot of examples are missing. If you spot an error or wish to add a page feel free to do a PR. We are very open so don't hesitate to contribute.</p>
+<p>The code examples in this book can be found <a href="https://github.com/rust-cv/cv/tree/master/tutorial-code/">here</a>. The source for the book can be found <a href="https://github.com/rust-cv/cv/tree/master/tutorial/">here</a>.</p>
+<h2 id="project-structure"><a class="header" href="#project-structure">Project structure</a></h2>
+<p>Before using Rust-CV it is important to understand how the ecosystem is set-up and how to use it.</p>
+<p>If you look at the <a href="https://github.com/rust-cv/cv">repository</a> you can see multiples directories and a <code>Cargo.toml</code> file that contains a <code>[workspace]</code> section. As the name implies, we are using the workspace feature of Cargo. To put it simply, a cargo workspace allows us to create multiple packages in the same repository. 
+You can check the <a href="https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html">official documentation</a> to get more details.</p>
+<p>This is what happens here. Rust-CV is a mono-repository project which is made of multiple packages. For instance, we have the <code>cv-core</code> directory that contains the very basic things for computer vision. We also have the <code>imgshow</code> directory which allow us to show images. There is many more but we won't go deeper for now. The <code>cv</code> crate needs to be explained though. The <code>cv</code> crate is rather empty (code wise) and just reexports most of the other package so by just depending on it we have most of what the project has to offer.</p>
+<p>There are three things to remember here :</p>
+<ul>
+<li><a href="https://github.com/rust-cv/cv">Rust-CV repository</a> is a mono repository that is split-up into multiple packages.</li>
+<li>The way the project is structured allows you to use tiny crates so you don't have to pay the price for all the CV code if you just use a subpart. </li>
+<li>The project defines a crate named <code>cv</code> that depends on many others just to re-export them. This is useful to get started faster, as by just pulling this crate you have already many computer vision algorithms and data structures ready to use.</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                        
-                            <a rel="prev" href="ch1-introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
-                            </a>
-                        
 
-                        
-                            <a rel="next" href="ch3-akaze-features-extraction.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="chapter2-first-program.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
-                        
 
                         <div style="clear: both"></div>
                     </nav>
@@ -233,49 +174,32 @@ imgshow::imgshow(&amp;out_img);
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                
-                    <a rel="prev" href="ch1-introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                        <i class="fa fa-angle-left"></i>
-                    </a>
-                
 
-                
-                    <a rel="next" href="ch3-akaze-features-extraction.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="chapter2-first-program.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
-                
             </nav>
 
         </div>
 
-        
 
-        
 
-        
 
-        
         <script type="text/javascript">
             window.playground_copyable = true;
         </script>
-        
 
-        
 
-        
         <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        
 
         <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
         <script src="book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
-        
 
-        
 
     </body>
 </html>
